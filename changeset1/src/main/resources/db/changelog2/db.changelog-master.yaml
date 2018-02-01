@@ -1,0 +1,15 @@
+## YAML Template.
+databaseChangeLog:
+  - changeSet:
+        id: createPenguin
+        author: jwraxall
+        changes:
+            - sqlFile:
+                dbms: mysql
+                encoding: utf8
+                path: createdb3.sql
+                relativeToChangelogFile: true
+                splitStatements: true
+                stripComments: true
+
+          
