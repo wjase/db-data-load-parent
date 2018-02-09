@@ -13,8 +13,8 @@
     </description>
     
     <scm>
-        <connection>scm:git:https://github.com/wjase/db-data-load-parent.git/db-data-load</connection>
-        <url>https://github.com/wjase/db-data-load-parent.git/db-data-load</url>
+        <connection>scm:git:https://github.com/wjase/db-data-load-parent.git</connection>
+        <url>https://github.com/wjase/db-data-load-parent.git</url>
     </scm>
 
     <url>https://github.com/wjase/db-data-load-parent/db-data-load.git</url>
