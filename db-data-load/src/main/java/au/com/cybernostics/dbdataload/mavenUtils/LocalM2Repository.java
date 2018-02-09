@@ -24,10 +24,12 @@ package au.com.cybernostics.dbdataload.mavenUtils;
  * limitations under the License.
  * #L%
  */
-
+import java.io.File;
 import java.net.URL;
+import org.apache.commons.lang3.StringUtils;
 import static org.apache.maven.artifact.Artifact.LATEST_VERSION;
 import org.apache.maven.model.Dependency;
+import org.springframework.core.env.Environment;
 
 /**
  *
@@ -35,29 +37,55 @@ import org.apache.maven.model.Dependency;
  */
 public class LocalM2Repository {
 
-    public static boolean isGavURL(String url){
-        return url.startsWith("gav:");
-        
+    private static String mavenRoot = System.getProperty("user.home");
+
+    public static String getMavenRoot() {
+        return mavenRoot;
     }
-    public static Dependency parseGavUrl(String gav){
+
+    public static void setEnvironment(Environment e) {
+        String customMavenLocalRoot = e.getProperty("maven.local.root");
+        if (!StringUtils.isBlank(customMavenLocalRoot)) {
+            mavenRoot = customMavenLocalRoot;
+        } else {
+            String mavenConfig = e.getProperty("maven.config");
+            if (!StringUtils.isBlank(mavenConfig)) {
+                mavenRoot = mavenConfig + "/repository";
+            } else {
+                mavenRoot = System.getProperty("user.home") + "/.m2/repository";
+            }
+        }
+
+        if (!new File(mavenRoot).exists()) {
+            throw new IllegalArgumentException("Maven root doesn't exist:" + mavenRoot);
+        }
+
+    }
+
+    public static boolean isGavURL(String url) {
+        return url.startsWith("gav:");
+
+    }
+
+    public static Dependency parseGavUrl(String gav) {
         String[] parts = gav.split(":");
         Dependency dep = fromPartsArray(parts, 1);
         return dep;
-        
+
     }
-    
+
     public static Dependency parseGav(String gav) {
         String[] parts = gav.split(":");
-        Dependency dep = fromPartsArray(parts,0);
+        Dependency dep = fromPartsArray(parts, 0);
         return dep;
     }
 
     private static Dependency fromPartsArray(String[] parts, int offset) {
         Dependency dep = new Dependency();
-        dep.setGroupId(parts[offset+0]);
-        dep.setArtifactId(parts[offset+1]);
-        dep.setVersion(parts.length == offset+3 ? parts[offset+2] : LATEST_VERSION);
+        dep.setGroupId(parts[offset + 0]);
+        dep.setArtifactId(parts[offset + 1]);
+        dep.setVersion(parts.length == offset + 3 ? parts[offset + 2] : LATEST_VERSION);
         return dep;
     }
-    
+
 }

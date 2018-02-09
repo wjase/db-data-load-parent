@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-sign</actionName>
+            <displayName>sign</displayName>
+            <goals>
+                <goal>gpg:sign</goal>
+            </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-mci</actionName>
+            <displayName>mci</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>install</goal>
+            </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-ossrh sign</actionName>
+            <displayName>ossrh sign</displayName>
+            <goals>
+                <goal>gpg:sign</goal>
+            </goals>
+            <properties>
+                <ossrh>true</ossrh>
+            </properties>
+        </action>
+        <action>
+            <actionName>CUSTOM-mci ossrh</actionName>
+            <displayName>mci ossrh</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>install</goal>
+            </goals>
+            <activatedProfiles>
+                <activatedProfile>ossrh</activatedProfile>
+            </activatedProfiles>
+        </action>
+    </actions>

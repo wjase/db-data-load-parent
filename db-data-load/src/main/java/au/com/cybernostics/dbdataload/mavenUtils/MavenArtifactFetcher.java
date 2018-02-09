@@ -32,22 +32,14 @@ import static org.apache.maven.artifact.Artifact.LATEST_VERSION;
 import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.shared.invoker.MavenInvocationException;
+import org.springframework.core.env.Environment;
 
 /**
  *
  * @author jason
  */
-public class LocalMavenArtifactFetcher {
+public class MavenArtifactFetcher {
 
-    private static String userHome = System.getProperty("user.home");
-    private static String mavenRoot = String.format("%s/.m2/repository", userHome);
-
-    public static void setMavenRoot(String mavenRoot) {
-        LocalMavenArtifactFetcher.mavenRoot = mavenRoot;
-        if (!new File(mavenRoot).exists()) {
-            throw new IllegalArgumentException("Maven root doesn't exist:" + mavenRoot);
-        }
-    }
 
     /**
      * Either takes a local URL for a jar file and returns it or a gav which it
@@ -71,16 +63,16 @@ public class LocalMavenArtifactFetcher {
                         version);
                 File localPath = new File(new URI(urlPath));
                 if(!localPath.exists()){
-                    RemoteMavenArtifactFetcher.fetchArtfiact(dep);
+                    RepositoryMavenArtifactFetcher.fetchArtfiact(dep);
                 }
                 return new URL(urlPath);
                 
             } catch (MalformedURLException ex) {
-                Logger.getLogger(LocalMavenArtifactFetcher.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MavenArtifactFetcher.class.getName()).log(Level.SEVERE, null, ex);
             } catch (URISyntaxException ex) {
-                Logger.getLogger(LocalMavenArtifactFetcher.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MavenArtifactFetcher.class.getName()).log(Level.SEVERE, null, ex);
             } catch (MavenInvocationException ex) {
-                Logger.getLogger(LocalMavenArtifactFetcher.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MavenArtifactFetcher.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return null;
@@ -97,7 +89,7 @@ public class LocalMavenArtifactFetcher {
     }
 
     public static File localFolderFor(Dependency dep) {
-        String localArtifactRoot = mavenRoot + String.format("/%s/%s",
+        String localArtifactRoot = LocalM2Repository.getMavenRoot() + String.format("/%s/%s",
                 dep.getGroupId().replaceAll("\\.", "/"),
                 dep.getArtifactId()
         );

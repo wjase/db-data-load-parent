@@ -27,6 +27,9 @@ package au.com.cybernostics.dbdataload;
 
 import static au.com.cybernostics.dbdataload.mavenUtils.LocalM2Repository.isGavURL;
 import static au.com.cybernostics.dbdataload.mavenUtils.LocalM2Repository.parseGavUrl;
+import static au.com.cybernostics.dbdataload.mavenUtils.MavenArtifactFetcher.localFileURLForArtifact;
+import static au.com.cybernostics.dbdataload.mavenUtils.MavenArtifactFetcher.localFolderFor;
+import static au.com.cybernostics.dbdataload.mavenUtils.RepositoryMavenArtifactFetcher.fetchArtfiact;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -35,11 +38,6 @@ import java.util.logging.Logger;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import liquibase.resource.ResourceAccessor;
 import org.apache.maven.model.Dependency;
-import static au.com.cybernostics.dbdataload.mavenUtils.LocalMavenArtifactFetcher.localFileURLForArtifact;
-import static au.com.cybernostics.dbdataload.mavenUtils.LocalMavenArtifactFetcher.localFolderFor;
-import static au.com.cybernostics.dbdataload.mavenUtils.RemoteMavenArtifactFetcher.fetchArtfiact;
-import java.io.File;
-import java.net.URISyntaxException;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 
 /**

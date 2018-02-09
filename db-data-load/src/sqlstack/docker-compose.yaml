@@ -9,15 +9,15 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=testdb_root
       - MYSQL_USER=dbuser
-      - MYSQL_PASSWORD=testdb
+      - MYSQL_PASSWORD=secretpassword
       - MYSQL_DATABASE=dbtest
     networks:
       - net-spring-db
   dbsetup:
     environment:
-      - MAVEN_LOCAL_REPO=/.m2/repository 
+      - MAVEN_CONFIG=/.m2  
       - SPRING_DATASOURCE_USERNAME=dbuser
-      - SPRING_DATASOURCE_PASSWORD=testdb
+      - SPRING_DATASOURCE_PASSWORD=secretpassword
       - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/dbtest
 # specify your migrations here - note the fake gav url prefix
 # migations are performed in the order they appear below
@@ -34,7 +34,7 @@ services:
     networks:
       - net-spring-db
     volumes:
-      - /home/jason/.m2:/.m2    
+      - $HOME/.m2/repository:/.m2/repository    
     depends_on: 
       - db  
 networks:

@@ -14,13 +14,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <!-- Instruct Maven to use the generated manifest
-                             rather than overwriting it -->
-                        <manifestFile>${project.build.directory}/classes/META-INF/MANIFEST.MF</manifestFile>
-                    </archive>
-                </configuration>
+                <version>3.0.2</version>
             </plugin>
         </plugins>
     </build>

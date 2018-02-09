@@ -25,7 +25,7 @@ package au.com.cybernostics.dbdataload;
  * #L%
  */
 
-import static au.com.cybernostics.dbdataload.mavenUtils.LocalMavenArtifactFetcher.localFileURLForArtifact;
+import static au.com.cybernostics.dbdataload.mavenUtils.MavenArtifactFetcher.localFileURLForArtifact;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;

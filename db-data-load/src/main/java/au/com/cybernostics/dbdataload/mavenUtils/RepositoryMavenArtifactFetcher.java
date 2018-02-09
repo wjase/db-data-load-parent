@@ -34,7 +34,7 @@ import org.apache.maven.shared.invoker.MavenInvocationException;
  *
  * @author jason
  */
-public class RemoteMavenArtifactFetcher {
+public class RepositoryMavenArtifactFetcher {
     
     private final static String gavFormat = "%s:%s%s";
     

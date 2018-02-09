@@ -19,7 +19,6 @@ package au.com.cybernostics.dbdataload;
  * limitations under the License.
  * #L%
  */
-import static com.jayway.awaitility.Awaitility.await;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -37,7 +36,6 @@ import liquibase.Liquibase;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ResourceAccessor;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 
 /**
  * Wrapper object for a liquibase migration contained in a jar file on the local
@@ -70,19 +68,6 @@ public class ExternalLiquibaseMigration {
         this.dbToUpdate = dbToUpdate;
     }
     
-    private static Callable<Boolean> dbCheck(DataSource datasource){
-        return ()-> {
-            while(true){
-                try{
-                if(datasource.getConnection().isValid(100)){
-                    return true;
-                }
-                }catch(Throwable t){
-                    logger.warning("Couldn't reach DB yet.");
-                }
-            }
-        };
-    }
 
     /**
      * Call all the master changesets in this object.
@@ -91,18 +76,7 @@ public class ExternalLiquibaseMigration {
 
         try {
             if (resourceAccessor != null) {
-                ExecutorService executor = Executors.newFixedThreadPool(1);
-                Future<Boolean> dbOk = executor.submit(dbCheck(dbToUpdate));
-                
-                try {
-                    dbOk.get(60000, TimeUnit.MILLISECONDS);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(ExternalLiquibaseMigration.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ExecutionException ex) {
-                    Logger.getLogger(ExternalLiquibaseMigration.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (TimeoutException ex) {
-                    Logger.getLogger(ExternalLiquibaseMigration.class.getName()).log(Level.INFO, "Unable to get datasource conncection in 60 seconds:{0}", ex.getLocalizedMessage());
-                }
+                waitForDB();
 
                 JdbcConnection jdbcConnection = new JdbcConnection(dbToUpdate.getConnection());
                 for (String changelog : dbchangelogs) {
@@ -118,6 +92,35 @@ public class ExternalLiquibaseMigration {
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void waitForDB() {
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+        Future<Boolean> dbOk = executor.submit(dbCheck(dbToUpdate));
+        
+        try {
+            dbOk.get(60000, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ExternalLiquibaseMigration.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(ExternalLiquibaseMigration.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(ExternalLiquibaseMigration.class.getName()).log(Level.INFO, "Unable to get datasource conncection in 60 seconds:{0}", ex.getLocalizedMessage());
+        }
+    }
+
+    private static Callable<Boolean> dbCheck(DataSource datasource) {
+        return () -> {
+            while (true) {
+                try {
+                    if (datasource.getConnection().isValid(500)) {
+                        return true;
+                    }
+                } catch (Throwable t) {
+                    logger.warning("Couldn't reach DB yet.");
+                }
+            }
+        };
     }
 
 }

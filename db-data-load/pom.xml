@@ -13,10 +13,10 @@
     </description>
     
     <scm>
-        <url>https://github.com/wjase/db-data-load.git</url>
+        <url>https://github.com/wjase/db-data-load-parent.git/db-data-load</url>
     </scm>
-    
-    <url>https://github.com/wjase/db-data-load.git</url>
+
+    <url>https://github.com/wjase/db-data-load-parent/db-data-load.git</url>
     <developers>
         <developer>
             <organization>Cybernostics Pty Ltd Australia</organization>

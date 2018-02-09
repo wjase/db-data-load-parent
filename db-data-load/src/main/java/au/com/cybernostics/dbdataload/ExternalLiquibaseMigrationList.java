@@ -26,6 +26,10 @@ package au.com.cybernostics.dbdataload;
  */
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 
 /**
@@ -43,6 +47,16 @@ class ExternalLiquibaseMigrationList {
     @PostConstruct
     public void update(){
         migrations.forEach(m->m.update());
+        
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+        executor.submit(()->{
+            try {
+                Thread.sleep(5000L);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ExternalLiquibaseMigrationList.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.exit(0);});
+        
     }
     
 }

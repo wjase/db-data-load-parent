@@ -33,7 +33,22 @@ What kinds of data could you load.
 In production you could version your seed data independently of your application. 
 
 For testing you could define useful subsets of data for testing different types of scenarios.
-eg. If you have different types of customers you could define a data bundle for them. 
+eg. If you have different types of customers you could define a data bundle for them.
+
+
+      - MAVEN_LOCAL_REPO=$MAVEN_CONFIG/repository 
+      - SPRING_DATASOURCE_USERNAME=dbuser
+      - SPRING_DATASOURCE_PASSWORD=testdb
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/dbtest 
+      - DB_MIGRATIONS=
+        [
+            {   "changeLogRoot":"gav:au.com.cybernostics.changesets:changeset1",
+                "changelogs":[
+                    "db/changelog/db.changelog-master.yaml",
+                    "db/changelog2/db.changelog-master.yaml"
+                    ]
+            }
+        ]
  
 
 
