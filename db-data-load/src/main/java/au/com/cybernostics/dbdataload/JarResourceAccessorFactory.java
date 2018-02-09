@@ -50,12 +50,12 @@ public class JarResourceAccessorFactory {
     /**
      * mvn org.apache.maven.plugins:maven-dependency-plugin:2.1:get \
      * -DrepoUrl=url \ -Dartifact=groupId:artifactId:version
-     * @param rootSpec
-     * @return 
+     * @param localM2Folder 
+     * @return a liquibase resource accessor for locating changeset files
      */
 
-    public static ResourceAccessor resourceAccessor(String rootSpec) {
-        URL rootURL = asURL(rootSpec);
+    public static ResourceAccessor resourceAccessor(String localM2Folder) {
+        URL rootURL = asURL(localM2Folder);
         
         if(rootURL!=null){
             LOG.info("Root URL is:" + rootURL);
@@ -72,13 +72,12 @@ public class JarResourceAccessorFactory {
         if(rootSpec!=null){
             try {
                 if (isFileURL(rootSpec) || isJarFileURL(rootSpec)) {
-                    LOG.info("Is Jar file");
                     return new URL(rootSpec);
                 }
                 if (isGavURL(rootSpec)) {
                     Dependency artifact = parseGavUrl(rootSpec);
                     if (!localFolderFor(artifact).exists()) {
-                        LOG.info("Local file doesn't exist - trying remote");
+                        LOG.fine("Local file doesn't exist - trying remote");
                         try {
                             fetchArtfiact(artifact);
                         } catch (MavenInvocationException ex) {

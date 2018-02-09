@@ -71,18 +71,20 @@ public class LiquibaseDatabaseInitialiserApplication implements CommandLineRunne
      * changeLogRoot - either a URL pointing to the root of a set of changesets
      * or a gav: url which will fetch from maven and resolve to a jar URL.
      * changelogs - array of paths relative to the root
- * @param localMavenRepo
+ * @param ds - db into which to load data
+ * @param migrations - json spec for an array of ExternalLiquibaseMigration
+ * @param environment  - spring property source
  * @return 
  */
     @Bean
     public ExternalLiquibaseMigrationList elm(DataSource ds, 
             @Value("${db.migrations:}") String migrations, 
             Environment environment) {
-        System.out.println("Running liquibase migration");
+        LOG.info("Running liquibase migration");
         
         setEnvironment(environment);
         
-        System.out.println("Maven Root:"+ LocalM2Repository.getMavenRoot());
+        LOG.fine("Maven Root:"+ LocalM2Repository.getMavenRoot());
 
         List<ExternalLiquibaseMigration> migrationsList = EMPTY_LIST;
 
@@ -113,7 +115,6 @@ public class LiquibaseDatabaseInitialiserApplication implements CommandLineRunne
         }catch(Throwable t){
             t.printStackTrace();
             LOG.severe("Error running migrations - exception thrown");
-            
         }
 
         throw new IllegalStateException("Coudn't create migrations");

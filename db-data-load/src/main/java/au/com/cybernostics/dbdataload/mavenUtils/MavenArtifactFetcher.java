@@ -32,7 +32,6 @@ import static org.apache.maven.artifact.Artifact.LATEST_VERSION;
 import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.shared.invoker.MavenInvocationException;
-import org.springframework.core.env.Environment;
 
 /**
  *
@@ -46,8 +45,8 @@ public class MavenArtifactFetcher {
      * parses into a Dependency to download. The downloaded URL points to a jar
      * in the .m2 directory
      *
-     * @param gav
-     * @return
+     * @param dep - the dependency to fetch
+     * @return a local .m2 url for the jar artifact 
      */
     public static URL localFileURLForArtifact(Dependency dep) {
 
