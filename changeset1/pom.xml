@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>au.com.cybernostics.changesets</groupId>
     <artifactId>changeset1</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.9.2-SNAPSHOT</version>
     <name>changeset1</name>
     <packaging>jar</packaging>
     
